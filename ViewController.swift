@@ -83,10 +83,18 @@ class ViewController: UICollectionViewController,
             person.name = newName
             self?.collectionView.reloadData()
             })
-            ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-            present (ac, animated: true)
+        ac.addAction(UIAlertAction(title: "Delete", style: .destructive){
+            [weak self]  _ in
+            // remove person some how...
+        })
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            
+            
+        
+        present (ac, animated: true)
             
         }
+        
     }
 
 
