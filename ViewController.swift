@@ -15,6 +15,15 @@ class ViewController: UICollectionViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+        
+        let defaults = UserDefaults.standard
+        
+        if let savedPeople = defaults.object(forKey: "people") as? Data {
+            if let decodedPeople = try?
+                NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedPeople) as? [Person] {
+                people = decodedPeople
+            }
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -61,6 +70,7 @@ class ViewController: UICollectionViewController,
         
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
+        save()
         collectionView.reloadData()
         
         dismiss(animated: true)
@@ -81,6 +91,7 @@ class ViewController: UICollectionViewController,
             weak ac] _ in
             guard let newName = ac?.textFields?[0].text else{ return }
             person.name = newName
+            self?.save()
             self?.collectionView.reloadData()
             })
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive){
@@ -94,6 +105,12 @@ class ViewController: UICollectionViewController,
         present (ac, animated: true)
             
         }
+    func save() {
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: people, requiringSecureCoding: false){
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "people")
+        }
+    }
         
     }
 
