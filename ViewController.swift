@@ -60,7 +60,7 @@ class ViewController: UICollectionViewController,
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = info[.editedImage] as? UIImage else {return}
+        guard let image = info[.originalImage] as? UIImage else {return}
         
         let imageName = UUID().uuidString
         let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
@@ -72,7 +72,7 @@ class ViewController: UICollectionViewController,
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
         save()
-        collectionView.reloadData()
+        collectionView?.reloadData()
         
         dismiss(animated: true)
     }
